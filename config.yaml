@@ -1,0 +1,45 @@
+global:
+  globalKey: "globalValue"
+  path_split: "_"
+  prefix: "test"
+
+output: #输出配置
+  out_put_path: #输出文件夹名称 将以下列列表用out_put_path_split拼接
+    - "pathPre1"
+    - "pathPre2"
+  out_put_path_split: "_"
+  # prefix文件名suffix.格式
+  enable_out_put_file_prefix: true #前缀开关
+  out_put_file_prefix: #输出文件夹前缀 将以下列列表用out_put_path_split拼接
+    - ${requirement.number}
+  out_put_file_prefix_split: "_" # 输出文件夹前缀分隔符
+  enable_out_put_file_suffix: false # 后缀开关
+  out_put_file_suffix: #输出文件夹后缀 将以下列列表用out_put_path_split拼接
+    - "pathSuf1"
+    - "pathSuf2"
+  out_put_file_split_suffix: ${global.path_split} # 输出文件夹前缀分隔符
+
+docx:
+  global:
+    docxGlobalKey: "docxGlobalValue"
+  docx1:
+    docx1Key: "docx1Value"
+  docx2:
+    docx2Key: "docx2Value"
+
+execl:
+  template: #直接操作模板
+    global: #excel全局模板
+      excelGlobalKey: excelGlobalValue
+    excelFile1:
+      excelFile1Key: excelFile1Value
+    excelFile2:
+      excelFile2Key: excelFile2Value
+
+  executeCell:
+    excelFile1:
+      sheet1:
+        A1: 'A1的value'
+      sheet2:
+        C3: 'C3TestValue'
+
