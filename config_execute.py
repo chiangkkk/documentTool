@@ -19,18 +19,17 @@ class ConfigExecute:
 
     def read_config(self, source: str) -> str:
         value = source
-        match = self.match_placeholder(value)
-        while not (match is None):
-            placeHolder = match.group()
-            readKey = self.read_key(placeHolder)
-            value = value.replace(placeHolder, readKey)
-            match = self.match_placeholder(value)
+        matches = self.match_placeholder(value)
+        for match in matches:
+            readKey = self.read_key(match)
+            if match != readKey:
+                value = value.replace(match, readKey)
         return value
 
     @staticmethod
     def match_placeholder(string):
         par = re.compile('\${.*?}')
-        match = par.match(string)
+        match = par.findall(string)
         return match
 
     def read_key(self, key):
@@ -54,3 +53,6 @@ class ConfigExecute:
                 self.log.error("config template key error, key: %s" % source)
                 return source
         return key
+
+
+

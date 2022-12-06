@@ -11,7 +11,7 @@ output: #输出配置
   # prefix文件名suffix.格式
   enable_out_put_file_prefix: true #前缀开关
   out_put_file_prefix: #输出文件夹前缀 将以下列列表用out_put_path_split拼接
-    - ${requirement.number}
+    - ${global.prefix}
   out_put_file_prefix_split: "_" # 输出文件夹前缀分隔符
   enable_out_put_file_suffix: false # 后缀开关
   out_put_file_suffix: #输出文件夹后缀 将以下列列表用out_put_path_split拼接
@@ -30,6 +30,9 @@ docx:
     docx1Key: "docx1Value"
   docx2:
     docx2Key: "docx2Value"
+  测试文档:
+    hello: "你好"
+    world: "世界"
 
 execl:
   template: #直接操作模板

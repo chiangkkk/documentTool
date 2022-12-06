@@ -1,4 +1,5 @@
 import os
+import traceback
 
 import docx_execute
 
@@ -30,22 +31,24 @@ class DocumentTool:
                 self.file_prefix = ''
         return self.file_prefix
 
-    @staticmethod
-    def list_concat(str_list, split):
+    def list_concat(self, str_list, split):
         if split is None:
             split = ''
+        split = self.read_value(split)
         result = ''
         for temp in str_list:
             if result != '':
                 result += split
-            result += temp
+            result += self.read_value(temp)
         return result
 
     def get_output_config(self):
         return self.config['output']
 
     def get_output(self, name):
-        return self.get_output_config() + "/" + name
+        path_name = self.get_file_output_path_name()
+        file_name = self.get_file_name(name)
+        return path_name + "/" + file_name
 
     def get_suffix(self):
         if self.file_suffix is None:
@@ -56,7 +59,7 @@ class DocumentTool:
                 self.file_suffix = ''
         return self.file_suffix
 
-    def get_file_path_name(self):
+    def get_file_output_path_name(self):
         if self.file_path_name is None:
             path_list = self.get_output_config()['out_put_path']
             path_split = self.get_output_config()['out_put_path_split']
@@ -80,7 +83,7 @@ class DocumentTool:
         pass
 
     def mk_file_path(self):
-        file_name = self.get_file_path_name()
+        file_name = self.get_file_output_path_name()
         if not os.path.exists(file_name):
             os.mkdir(file_name)
 
@@ -91,8 +94,16 @@ class DocumentTool:
     def execute_docx(self):
         template_list = self.get_docx_template_list()
         for template in template_list:
-            content = self.get_docx_content(template)
-            docx_execute.exec_docx(self.get_template_path() + "/" + template, self.get_output(template), content)
+            print(f'开始处理 {template}', end='')
+            try:
+                content = self.get_docx_content(template)
+                docx_execute.exec_docx(self.get_template_path() + "/" + template,
+                                       self.get_file_output_path_name() + '/' + self.get_file_name(template), content)
+                print('-' * 5 + "✓")
+            except Exception as e:
+                print('-' * 5 + "✕")
+                print("出现异常：%s" % e)
+                traceback.print_exc()
 
     def get_template_path(self):
         if self.template_path is None:
@@ -128,7 +139,7 @@ class DocumentTool:
         if not (global_docx_config is None):
             for k, v in global_docx_config.items():
                 docx_dicts[k] = self.read_value(v)
-        docx_config = global_docx_config[file_name.replace(".docx", "")]
+        docx_config = self.config['docx'][file_name.replace(".docx", "")]
         if not (docx_config is None):
             for k, v in docx_config.items():
                 docx_dicts[k] = self.read_value(v)
