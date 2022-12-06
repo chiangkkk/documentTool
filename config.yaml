@@ -5,8 +5,8 @@ global:
 
 output: #输出配置
   out_put_path: #输出文件夹名称 将以下列列表用out_put_path_split拼接
-    - "pathPre1"
-    - "pathPre2"
+    - "output"
+    - "1"
   out_put_path_split: "_"
   # prefix文件名suffix.格式
   enable_out_put_file_prefix: true #前缀开关
@@ -18,6 +18,10 @@ output: #输出配置
     - "pathSuf1"
     - "pathSuf2"
   out_put_file_split_suffix: ${global.path_split} # 输出文件夹前缀分隔符
+
+input:
+  template_path: './template' #模板路径
+
 
 docx:
   global:
