@@ -45,6 +45,9 @@ class DocumentTool:
     def get_output_config(self):
         return self.config['output']
 
+    def get_input(self, name):
+        return self.get_template_path() + "/" + name
+
     def get_output(self, name):
         path_name = self.get_file_output_path_name()
         file_name = self.get_file_name(name)
@@ -80,7 +83,6 @@ class DocumentTool:
         self.mk_file_path()
         self.execute_docx()
         self.execute_execl()
-        pass
 
     def mk_file_path(self):
         file_name = self.get_file_output_path_name()
@@ -97,8 +99,7 @@ class DocumentTool:
             print(f'开始处理 {template}', end='')
             try:
                 content = self.get_docx_content(template)
-                docx_execute.exec_docx(self.get_template_path() + "/" + template,
-                                       self.get_file_output_path_name() + '/' + self.get_file_name(template), content)
+                docx_execute.exec_docx(self.get_input(template), self.get_output(template), content)
                 print('-' * 5 + "✓")
             except Exception as e:
                 print('-' * 5 + "✕")
