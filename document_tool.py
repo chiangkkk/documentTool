@@ -8,6 +8,8 @@ from config_execute import ConfigExecute
 
 
 class DocumentTool:
+    temp_prefix: str = ".temp"
+
     def __init__(self):
         self.config_execute = ConfigExecute()
         self.config = self.config_execute.get_config()
@@ -90,7 +92,32 @@ class DocumentTool:
             os.mkdir(file_name)
 
     def execute_execl(self):
+        template_list = self.get_execl_template_list()
+        for template in template_list:
+            print(f'开始处理 {template}', end='')
+            try:
+                self.do_execute_execl(template)
+                print('-' * 5 + "✓")
+            except Exception as e:
+                print('-' * 5 + "✕")
+                print("出现异常：%s" % e)
+                traceback.print_exc()
+        pass
 
+    def do_execute_execl(self, file_name: str):
+        file_pre = file_name.rstrip(".xlsx")
+        print(file_pre)
+        cell_files: dict = self.config['execl']['executeCell']
+        print(cell_files)
+        if file_pre in cell_files.keys():
+            file_temp = file_pre + "_temp" + ".xlsx"
+            self.execute_excel_cell(file_name, file_temp)
+            self.execute_excel_template(file_temp)
+            self.remove_temp(file_temp)
+        else:
+            self.execute_excel_template(file_name)
+
+    def execute_excel_cell(self, file_name: str, file_temp: str):
         pass
 
     def execute_docx(self):
@@ -155,3 +182,9 @@ class DocumentTool:
                     execl_list.append(file)
             self.execl_list = execl_list
         return self.execl_list
+
+    def execute_excel_template(self, template):
+        pass
+
+    def remove_temp(self, template):
+        pass
